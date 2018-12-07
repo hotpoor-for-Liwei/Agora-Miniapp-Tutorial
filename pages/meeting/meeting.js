@@ -49,13 +49,19 @@ Page({
     /**
      * debug
      */
-    debug: false
+    debug: false,
+    comment_connent:'',
+    comment_area:'block',
+    userInfo:null,
+    hasUserInfo:false,
+    comment_list:[],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that = this;
     Utils.log(`onLoad`);
     // get channel from page query param
     this.channel = options.channel;
@@ -89,8 +95,102 @@ Page({
         showCancel: false
       })
     }
-  },
+    console.log("=== onLoad ===");
+    let userInfo = wx.getStorageSync("userInfo");
+    if (userInfo){
+      that.setData({
+        hasUserInfo: true,
+        userInfo: userInfo
+      });
+    }
+    wx.closeSocket();
+    wx.connectSocket({
+      url: 'wss://www.hotpoor.com/api/data/ws?aim_id=0cd8429c1da249b6935d7eef72d7fc0b',
+      data:{
+        aim_id:'0cd8429c1da249b6935d7eef72d7fc0b'
+      }
+    })
+    wx.onSocketOpen(function (res){
+      app.globalData.wss = true
+      console.log("ws onSocketOpen")
+      console.log(res)
+      var msg_now = ["JOINMOREROOMS", {}, "0cd8429c1da249b6935d7eef72d7fc0b", ["AGORAIO"]]
+      // var msg_now = ["JOINMOREROOMS", {}, "0cd8429c1da249b6935d7eef72d7fc0b", ["HACKATHON"]]
+      msg_now = JSON.stringify(msg_now)
+      wx.sendSocketMessage({
+        data:msg_now
+      })
+    })
+    var comment_list_now = []
+    wx.onSocketMessage(function(data){
+      console.log(data)
+      var _message_line = JSON.parse(data.data)
+      if(_message_line.length!=3){
+        return
+      }
+      if(_message_line[0]!="COMMENT"){
+        return
+      }
+      comment_list_now.unshift(_message_line[1]["content"]["content"])
+      that.setData({
+        comment_area:'block',
+        comment_list:comment_list_now
+      })
+    })
+    
+    wx.onSocketError(function() {
+      console.log('websocket连接失败！');
+    })
+    wx.onSocketClose(function(res) {
+      console.log('WebSocket 已关闭！')
+    })
 
+
+
+    console.log("=== check ws ===");
+  },
+  commentFormSend:function(e){
+    var this_content = e.detail.value.comment_connent;
+    console.log(this_content);
+    if(this_content == ""){
+      return
+    }
+    let userInfo = wx.getStorageSync("userInfo");
+    if (userInfo){
+      this.setData({
+        hasUserInfo: true,
+        userInfo: userInfo
+      });
+      this_content = userInfo["nickName"]+": "+this_content
+    }else{
+      this_content = this_content
+    }
+    
+    wx.request({
+      url: "https://www.hotpoor.com/api/comment/submit_secret_for_agoraio",
+      data:{
+        app: 'hotpoor',
+        aim_id: 'AGORAIO',
+        content: this_content,
+        msgtype: 'COMMENT',
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      method: "POST",
+      dataType: "json",
+      success:res =>{
+        console.log(res.data)
+        this.setData({
+          comment_connent:''
+        })
+      },
+      fail:res =>{
+        console.log(res)
+      }
+
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -498,7 +598,8 @@ Page({
     // get window size info from systemInfo
     const systemInfo = app.globalData.systemInfo;
     // 64 is the height of bottom toolbar
-    this.layouter = new Layouter(systemInfo.windowWidth, systemInfo.windowHeight - 64);
+    // this.layouter = new Layouter(systemInfo.windowWidth, systemInfo.windowHeight - 64);
+    this.layouter = new Layouter(systemInfo.windowWidth, systemInfo.windowHeight - 64 - 50 - 200);
   },
 
   /**

@@ -79,8 +79,104 @@ page {
 }
 
 .content .video-container {
-  display: flex;
-  width: 100%;
-  overflow: hidden;
-  flex-wrap: wrap;
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    flex-wrap: wrap;
+}
+
+.input_tools{
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    box-shadow: 0rpx 0rpx 4rpx rgba(0,0,0,0.2);
+    background-color: #f2f2f2;
+    height: 50px;
+}
+.input_tool{
+    position: relative;
+    width: 100%;
+    min-height: 40px;
+    padding-bottom: 10px;
+}
+.tool_audio_btn{
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    background-image: url(http://img.plancats.com/plus_gray.svg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+}
+.tool_word_content{
+    background-color: #fff;
+    position: relative;
+    left: 50px;
+    bottom: 5px;
+    box-shadow: 0rpx 0rpx 0rpx 2rpx rgba(0,0,0,0.1);
+    width: calc(100% - 120px - 50px);
+    border-radius: 8px;
+    padding: 2px 10px 2px 10px;
+    font-size: 14px;
+    color: #333;
+    min-height: calc(40px - 4px);
+    height: calc(40px - 4px);
+    /*max-height: calc((80rpx - 8rpx) * 3);*/
+    top:5px;
+    line-height: 20px;
+}
+.tool_word_content::-webkit-input-placeholder{
+    padding: 8px 10px 2px 10px;
+}
+.tool_word_content::-moz-placeholder{
+    padding: 8px 10px 2px 10px;
+}
+.tool_word_content:-moz-placeholder{
+    padding: 8px 10px 2px 10px;
+}
+.tool_word_content:-ms-input-placeholder{
+    padding: 8px 10px 2px 10px;
+}
+.tool_word_submit{
+    position: absolute;
+    font-size: 16px;
+    right: 5px;
+    bottom: 5px;
+    width: 90px;
+    height: 40px;
+    color: #777;
+    line-height: 40px;
+    /*background-color: #f8f8f8;*/
+}
+.comment_show{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: calc(100% - 64px - 50px);
+}
+.comment_show_cover{
+    width: calc(100% - 20px);
+    height: 180px;
+    position: absolute;
+    bottom: calc(64px + 50px);
+    /*bottom: 0px;*/
+    left: 0px;
+    padding: 10px;
+    visibility:visible;
+}
+.comment_show_line{
+    font-size: 32rpx;
+    width: 100%;
+    color: #666;
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+    -webkit-text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+    -moz-text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+    -ms-text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+    -o-text-shadow: 0px 2px 4px rgba(0,0,0,0.5);
+    white-space:normal;
+    visibility:visible;
 }

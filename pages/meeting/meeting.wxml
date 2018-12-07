@@ -6,7 +6,7 @@
         </agora-pusher>
         <agora-player wx:if="{{item.type === 1 && !item.holding}}" id="rtc-player-{{item.uid}}" uid="{{item.uid}}" x="{{item.left}}" y="{{item.top}}" width="{{item.width}}" height="{{item.height}}" debug="{{debug}}" url="{{item.url}}">
         </agora-player>
-    </block> 
+    </block>
   </view>
   <view class="footer flex-center-column">
     <view class="toolbar">
@@ -17,4 +17,20 @@
       <button plain="true" hover-class="hover" class="log btn" bindtap='onSubmitLog'></button>
     </view>
   </view>
+  <view class="input_tools" style="bottom:64px;">
+      <view class="input_tool tool_word">
+          <button class="tool_audio_btn"></button>
+          <form bindsubmit="commentFormSend">
+          <textarea class="tool_word_content" placeholder="发表你的伟大言论" adjust-position="true" cursor-spacing="14px" fixed="true" value="{{ comment_connent }}" name="comment_connent"></textarea>
+          <button formType="submit" class="tool_word_submit">发布</button>
+          </form>
+      </view>
+  </view>
+  <!-- <canvas class="comment_show" style="display:{{ comment_area }};" fixed="true" > -->
+  <cover-view class="comment_show_cover" style="overflow-y: scroll;">
+    <cover-view class="comment_show_line" wx:for="{{ comment_list }}">
+      {{item}}
+    </cover-view>
+  </cover-view>
+  <!-- </canvas> -->
 </view>
